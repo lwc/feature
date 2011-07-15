@@ -4,9 +4,10 @@ namespace Feature;
 
 class Instance
 {
-	private $strategies;
+	private $strategies = array();
 	private $default = false;
 	private $features;
+	private $callback;
 
 	public function create($name, $description, $default = null)
 	{
@@ -34,5 +35,10 @@ class Instance
 	public function strategies($strategies)
 	{
 		$this->strategies = $strategies;
+	}
+
+	public function init($callback)
+	{
+		$callback($this);
 	}
 }

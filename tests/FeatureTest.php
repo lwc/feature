@@ -33,6 +33,19 @@ class FeatureTest extends \PHPUnit_Framework_TestCase
 		$this->assertFalse(Feature::enabled('disabled-feature'));
 		$this->assertFalse(Feature::enabled('no-default-feature'));
 	}
+
+	public function testFeatureInit()
+	{
+		Feature::reset();
+		Feature::onInit(function ($feature) {
+			$feature->create('enabled-feature', "I'm enabled!", true);
+			$feature->strategies(array(
+				new \Feature\DefaultStrategy,
+			));
+		});
+
+		$this->assertTrue(Feature::enabled('enabled-feature'));
+	}
 }
 
 class DisabledFeatureStrategy extends \Feature\AbstractStrategy
