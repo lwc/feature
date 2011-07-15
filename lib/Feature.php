@@ -11,8 +11,11 @@ class Feature
 			self::$instance = new \Feature\Instance();
 
 		if (isset(self::$callback))
-			self::$instance->init(self::$callback);
-
+		{
+			$callback = self::$callback;
+			self::$callback = null;
+			self::$instance->init($callback);
+		}
 		return call_user_func_array(
 			array(self::$instance, $method), $params
 		);
