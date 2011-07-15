@@ -2,35 +2,16 @@
 
 class Feature
 {
-	private static $strategies;
-	private static $default = false;
-	private static $features;
+	private static $instance;
 
-	public static function create($name, $description, $default = null)
+	public static function __callStatic($method, $params)
 	{
-		self::$features[$name] = new \Feature\Definition($name, $description, $default);
+		if (!isset(self::$instance))
+			self::$instance = new \Feature\Instance();
+
+		return call_user_func_array(
+			array(self::$instance, $method), $params
+		);
 	}
 
-	public static function enabled($name)
-	{
-		$feature = self::$features[$name];
-		foreach (self::$strategies as $strategy)
-		{
-			if ($strategy->knows($feature))
-			{
-				return $strategy->on($feature);
-			}
-		}
-		return self::$default;
-	}
-
-	public static function set_default($default)
-	{
-		self::$default = $default;
-	}
-
-	public static function strategies($strategies)
-	{
-		self::$strategies = $strategies;
-	}
 }
